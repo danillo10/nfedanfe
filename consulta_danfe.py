@@ -1,12 +1,30 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
 import time
 
-# Caminho completo do ChromeDriver
-driver_path = '/usr/local/bin/chromedriver'  # Certifique-se de que o caminho do ChromeDriver está correto
+# Caminho completo do ChromeDriver e do Google Chrome
+driver_path = '/usr/local/bin/chromedriver'
+chrome_path = '/usr/bin/google-chrome'  # Verifique o caminho do Chrome
+
+# Diretório de download
+download_dir = "/home/servidor01/nfedanfe/xml"
+
+# Configuração das opções do Chrome
+chrome_options = Options()
+chrome_options.binary_location = chrome_path
+prefs = {
+    "download.default_directory": download_dir,
+    "download.prompt_for_download": False,      # Desativa o prompt de download
+    "download.directory_upgrade": True,         # Garante que o diretório de download seja atualizado
+    "safebrowsing.enabled": True                # Desativa o aviso de "arquivo perigoso"
+}
+chrome_options.add_experimental_option("prefs", prefs)
+
+# Inicializa o driver com o serviço configurado
 service = Service(driver_path)
-driver = webdriver.Chrome(service=service)
+driver = webdriver.Chrome(service=service, options=chrome_options)
 
 # Acesse o site
 url = 'https://meudanfe.com.br/'
